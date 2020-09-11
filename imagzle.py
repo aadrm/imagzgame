@@ -4,7 +4,7 @@ from board import Board
 
 WIDTH = 800
 HEIGHT = 800
-FPS = 30
+FPS = 100000
 TITLE = "Hard game from Imagzle"
 
 #define colors
@@ -82,6 +82,7 @@ while running:
     # Keep loop runnnig at the right speed
     clock.tick(FPS)
     # Process input
+    # board.auto_play()
     for event in pygame.event.get():
         # check for closing the window
         if event.type == pygame.QUIT:
@@ -105,7 +106,7 @@ while running:
                 board.reset()
             
             elif event.key == pygame.K_b:
-                board.load_last()
+                board.undo_move()
             
             board.print_board()
         
