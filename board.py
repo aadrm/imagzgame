@@ -35,6 +35,7 @@ class Board():
         self.reset()
 
     def reset(self):
+        """resets the game to it's initiall status"""
         self.hist = list()
         self.move_hist = list()
         self.layout = list(
@@ -58,12 +59,13 @@ class Board():
         self.find_selectable()
     
     def save_state(self):
+        """ adds a copy of the status of the board to a list in order to have
+        a history of moves """
         copy = list()
         for i in range(0, 9):
             copy.append(list())
             for j in range(0, 9):
                 copy[i].append(self.layout[i][j])
-        # self.hist.append(copy)
 
     # def load_last(self):
     #     if self.hist:
@@ -71,6 +73,7 @@ class Board():
     #         self.layout = lay
     
     def undo_move(self):
+        """takes the board to a previous state"""
         if self.move_hist:
             move = self.move_hist.pop()
             move_x = move[0][0]
@@ -89,6 +92,7 @@ class Board():
 
     
     def select_cursor(self):
+        """tries to make a selection"""
         # print('making selection')
         char = self.cursor_char()
         layout = self.layout
@@ -105,6 +109,7 @@ class Board():
             self.sy = 0
     
     def make_move(self, direction):
+        """makes a move if it's a legal move"""
         # print('moving ', end='')
         sx = self.sx
         sy = self.sy
@@ -151,6 +156,7 @@ class Board():
             pass
 
     def move_cursor(self, direction):
+        """moves the cursor through the board"""
         if direction == 'u':
             if self.layout[self.cy - 1][self.cx] != ' ' and self.cy != 0:
                 # print('moving cursor up')
@@ -183,27 +189,26 @@ class Board():
                 pass
 
     def move(self, direction):
+        """decides if the move is supposed to move the cursor or to make a move"""
         if self.sx or self.sy:
             self.make_move(direction)
         else:
             self.move_cursor(direction)
 
     def print_board(self):
-        # print('- - - - - - - - - ')
-        # print(f'cx{self.cx}cy{self.cy} - sx{self.sx}sy{self.sy} ')
-        # print('- - - - - - - - - ')
+        """prints the board to the console"""
         for row in self.layout:
             for cell in row:
                 print(f'{cell} ', end='')
-            # print()
-        # print('- - - - - - - - - ')
     
-    def cursor_char(self):
+    def (self):
+        """return the character under the cursor"""
         return self.layout[self.cy][self.cx]
 
     # solver
     
     def find_selectable(self):
+        """detects all selectable tiles and updates the variable that stores this information"""
         selectable = list()
         self.print_board()
         for i in range(0, 9):
@@ -218,6 +223,7 @@ class Board():
             print(f'added selectable map {selectable}')
 
     def check_valid_moves(self, x, y):
+        """checks the moves that are possible to make for a given tile"""
         valid_moves = list()
         # print (self.layout[y][x])
         if self.layout[y][x] in ('+', 'x'):
@@ -235,6 +241,7 @@ class Board():
         return valid_moves
     
     def auto_move_cursor(self):
+        """moves the cursor to the next selectable tile"""
         if self.selectable_map[-1][-1]:
             # print(self.selectable_map[-1][-1][0])
             cursor_coordinates = self.selectable_map[-1][-1][0]
@@ -242,15 +249,14 @@ class Board():
             self.cy = cursor_coordinates[0]
             
     def decide_move_direction(self):
+        """makes a move in a direction that has not been done in the current state of the board"""
         moves = self.selectable_map[-1][-1][1]
         if moves: 
             direction = moves.pop()
-            # print(f'move direction: {direction}')
             return direction 
-        # else:
-            # print('no move possible')
 
     def auto_play(self):
+        """tries to brute force through the game"""
         if self.layout != self.correct:
             self.move_counter += 1
             self.auto_move_cursor()
