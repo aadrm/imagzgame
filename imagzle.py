@@ -2,6 +2,8 @@ import pygame
 import random
 from board import Board
 
+autoplay = input("Play yourself or let the computer try? 0 = human 1 (true) = computer ")
+
 WIDTH = 800
 HEIGHT = 800
 FPS = 100000
@@ -17,6 +19,8 @@ YELLOW = (255, 255, 98)
 PURPLE = (255, 0, 255)
 ORANGE = (240,150,30)
 ORANGE_LIGHT = (255,180,40)
+
+
 # initialize pygame and create window
 
 pygame.init()
@@ -82,34 +86,35 @@ while running:
     # Keep loop runnnig at the right speed
     clock.tick(FPS)
     # Process input
-    # board.auto_play()
-    for event in pygame.event.get():
-        # check for closing the window
-        if event.type == pygame.QUIT:
-            running = False
-        
-        if event.type == pygame.KEYDOWN:
-            print ('keypress')
-            if event.key == pygame.K_UP:
-                board.move('u')
-            elif event.key == pygame.K_DOWN:
-                board.move('d')
-            elif event.key == pygame.K_LEFT:
-                board.move('l')
-            elif event.key == pygame.K_RIGHT:
-                board.move('r')
-
-            elif event.key == pygame.K_SPACE:
-                board.select_cursor()
-
-            elif event.key == pygame.K_r:
-                board.reset()
+    if autoplay:
+        board.auto_play()
+    else:
+        for event in pygame.event.get():
+            # check for closing the window
+            if event.type == pygame.QUIT:
+                running = False
             
-            elif event.key == pygame.K_b:
-                board.undo_move()
-            
-            board.print_board()
-        
+            if event.type == pygame.KEYDOWN:
+                print ('keypress')
+                if event.key == pygame.K_UP:
+                    board.move('u')
+                elif event.key == pygame.K_DOWN:
+                    board.move('d')
+                elif event.key == pygame.K_LEFT:
+                    board.move('l')
+                elif event.key == pygame.K_RIGHT:
+                    board.move('r')
+
+                elif event.key == pygame.K_SPACE:
+                    board.select_cursor()
+
+                elif event.key == pygame.K_r:
+                    board.reset()
+                
+                elif event.key == pygame.K_b:
+                    board.undo_move()
+                
+                board.print_board()
     # Update
     all_sprites.update()
     # Draw
